@@ -1,0 +1,17 @@
+// ============================================================
+// FONTS
+// ============================================================
+
+// Import Monument Extended (for headings)
+// Vite detectará estas importaciones y las incluirá en el build
+@font-face {
+  font-family: 'Monument Extended';
+  src: url('../fonts/MonumentExtended-Black.woff2') format('woff2'),
+       url('../fonts/MonumentExtended-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Import Google Fonts: Poppins (for body text)
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');

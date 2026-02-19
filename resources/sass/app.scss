@@ -1,0 +1,386 @@
+// ============================================================
+// FONTS
+// ============================================================
+@import "fonts";
+
+// ============================================================
+// FONT AWESOME
+// ============================================================
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+// ============================================================
+// BOOTSTRAP OVERRIDES
+// ============================================================
+
+// Import Bootstrap functions first (needed by our overrides)
+@import "bootstrap/scss/functions";
+
+// Override colors BEFORE importing variables
+$primary: #0D3A63 !default;
+$secondary: #098CC0 !default;
+
+// Font families
+$font-family-sans-serif: 'Poppins', sans-serif !default;
+$headings-font-family: 'Monument Extended', sans-serif !default;
+
+// Font weights
+$headings-font-weight: 900 !default;  // Monument Extended Black is weight 900
+$font-weight-base: 400 !default;
+$font-weight-bold: 700 !default;
+
+// Import custom Bootstrap overrides (defines $unit and imports variables)
+@import "bootstrap-overrides";
+
+// Import Bootstrap core
+@import "bootstrap/scss/bootstrap";
+
+// ============================================================
+// CUSTOM STYLES
+// ============================================================
+body {
+  font-size: 15px;
+}
+// ============================================================
+// NAVIGATION
+// ============================================================
+
+.navbar {
+  .navbar-brand {
+    font-family: $headings-font-family;
+    font-weight: 700;
+    color: $primary !important;
+  }
+
+  .nav-link {
+    font-weight: 500;
+
+    &.active {
+      color: $secondary !important;
+    }
+  }
+}
+
+// ============================================================
+// CARDS
+// ============================================================
+
+.card {
+  border: none;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// ============================================================
+// PRODUCTS
+// ============================================================
+
+.product-card {
+  .product-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    aspect-ratio: 1 / 1;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.1);
+    }
+  }
+
+  .product-info {
+    padding: 1rem 0;
+
+    .product-title {
+      font-family: $headings-font-family;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: $primary;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-brand {
+      font-size: 0.875rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-price {
+      font-family: $headings-font-family;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: $secondary;
+    }
+
+    .product-list-price {
+      font-size: 0.9rem;
+      color: #999;
+      text-decoration: line-through;
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+// ============================================================
+// SWIPER CUSTOMIZATION
+// ============================================================
+
+.swiper {
+  width: 100%;
+  height: 100%;
+
+  .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .swiper-pagination-bullet {
+    background-color: $secondary;
+    opacity: 0.5;
+
+    &-active {
+      opacity: 1;
+    }
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: $primary;
+
+    &:hover {
+      color: $secondary;
+    }
+  }
+
+  // Captions positioned absolutely over slides
+  .swiper-caption {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+
+    > div {
+      pointer-events: auto;
+    }
+
+    &.top {
+      align-items: flex-start;
+      padding-top: 2rem;
+    }
+
+    &.bottom {
+      align-items: flex-end;
+      padding-bottom: 2rem;
+    }
+
+    &.start {
+      justify-content: flex-start;
+      padding-left: 2rem;
+    }
+
+    &.end {
+      justify-content: flex-end;
+      padding-right: 2rem;
+    }
+  }
+}
+
+// ============================================================
+// HERO SECTION
+// ============================================================
+
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 0;
+
+  @media (min-width: 768px) {
+    padding: 6rem 0;
+  }
+
+  .hero-content {
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+
+      @media (min-width: 768px) {
+        font-size: 3.5rem;
+      }
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+
+      @media (min-width: 768px) {
+        font-size: 1.25rem;
+      }
+    }
+  }
+}
+
+// ============================================================
+// CATEGORIES
+// ============================================================
+
+.category-card {
+  text-align: center;
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+    .category-icon {
+      color: $secondary;
+      transform: scale(1.1);
+    }
+  }
+
+  .category-icon {
+    font-size: 3rem;
+    color: $primary;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .category-name {
+    font-family: $headings-font-family;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: $primary;
+  }
+}
+
+// ============================================================
+// FOOTER
+// ============================================================
+
+.footer {
+  background-color: $primary;
+  color: #fff;
+  padding: 3rem 0 1.5rem;
+
+  h5 {
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  a {
+    color: rgba(255, 255, 255, 0.8);
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  .copyright {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+// ============================================================
+// CART
+// ============================================================
+
+.cart-summary {
+  background-color: var(--bs-light);
+  border-radius: 12px;
+  padding: 1.5rem;
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--bs-border-color);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.total {
+      font-family: $headings-font-family;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: $primary;
+      border-top: 2px solid $primary;
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+    }
+  }
+}
+
+// ============================================================
+// ANIMATIONS
+// ============================================================
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+// ============================================================
+// RESPONSIVE ADJUSTMENTS
+// ============================================================
+
+@media (max-width: 767.98px) {
+  .hero-section {
+    .hero-content {
+      text-align: center;
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  }
+}
+.btn-primary {
+  background-color: $primary;
+  border-color: $primary;
+  transition: all 0.25s ease;
+
+  &:hover,
+  &:focus {
+    background-color: $secondary;
+    border-color: $secondary;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+}

@@ -29,7 +29,7 @@
         <div class="mb-6">
             <form action="{{ route('admin.products.index') }}" method="GET" class="flex gap-3">
                 <div class="flex-1">
-                    <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, marca o categoría..." value="{{ request('search') }}">
+                    <input type="text" name="search" class="form-input" placeholder="Buscar por nombre, marca o categoría..." value="{{ request('search') }}">
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-search mr-2"></i>Buscar

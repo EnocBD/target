@@ -72,6 +72,12 @@
                         <span>Categorías</span>
                     </a>
 
+                    <a href="{{ route('admin.brands.index') }}"
+                       class="flex items-center px-4 py-3 text-white hover:bg-primary-600 transition-colors duration-200 rounded-lg mb-1 {{ request()->routeIs('admin.brands.*') ? 'bg-primary-600 border-r-4 border-primary-300' : '' }}">
+                        <i class="fas fa-trademark w-5 text-center mr-3"></i>
+                        <span>Marcas</span>
+                    </a>
+
                 @endcan
 
                 <!-- User Management Section -->

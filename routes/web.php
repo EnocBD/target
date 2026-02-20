@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ImageUploadController;
 use App\Http\Controllers\Admin\FormSubmissionController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\CartController;
 
 /*
@@ -73,6 +74,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         ->name('categories.media.delete');
     Route::post('categories/{category}/media/reorder', [CategoryController::class, 'reorderMedia'])
         ->name('categories.media.reorder');
+
+    // Brands
+    Route::resource('brands', BrandController::class);
 
     // Settings
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');

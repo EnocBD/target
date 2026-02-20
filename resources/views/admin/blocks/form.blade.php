@@ -2441,7 +2441,7 @@
                 if (e.target.closest('.dropzone')) {
                     e.preventDefault();
                     const dropzone = e.target.closest('.dropzone');
-                    dropzone.classList.add('border-primary', 'bg-light');
+                    dropzone.classList.add('border-blue-600', 'bg-gray-50');
                 }
             });
 
@@ -2449,7 +2449,7 @@
                 if (e.target.closest('.dropzone')) {
                     e.preventDefault();
                     const dropzone = e.target.closest('.dropzone');
-                    dropzone.classList.remove('border-primary', 'bg-light');
+                    dropzone.classList.remove('border-blue-600', 'bg-gray-50');
                 }
             });
 
@@ -2458,7 +2458,7 @@
                     e.preventDefault();
                     const dropzone = e.target.closest('.dropzone');
                     const container = dropzone.closest('.dropzone-container');
-                    dropzone.classList.remove('border-primary', 'bg-light');
+                    dropzone.classList.remove('border-blue-600', 'bg-gray-50');
 
                     const files = e.dataTransfer.files;
                     if (files.length > 0) {

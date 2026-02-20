@@ -12,7 +12,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 uppercase tracking-wider">Total Páginas</p>
-                    <p class="text-2xl font-bold text-primary mt-2">{{ $stats['total_pages'] }}</p>
+                    <p class="text-2xl font-bold text-blue-600 mt-2">{{ $stats['total_pages'] }}</p>
                 </div>
                 <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-200">
                     <i class="fas fa-file-lines"></i>
@@ -38,9 +38,9 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 uppercase tracking-wider">Total Bloques</p>
-                    <p class="text-2xl font-bold text-primary mt-2">{{ $stats['total_blocks'] }}</p>
+                    <p class="text-2xl font-bold text-green-600 mt-2">{{ $stats['total_blocks'] }}</p>
                 </div>
-                <div class="w-12 h-12 rounded-lg bg-green-100 text-primary flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-200">
+                <div class="w-12 h-12 rounded-lg bg-green-100 text-green-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-200">
                     <i class="fas fa-cubes"></i>
                 </div>
             </div>
@@ -88,7 +88,7 @@
                         </a>
                         
                         <a href="{{ route('admin.blocks.index') }}" 
-                           class="btn btn-secondary group border border-primary text-primary hover:bg-primary hover:text-white">
+                           class="btn btn-secondary group border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">
                             <i class="fas fa-cubes mr-2 group-hover:scale-110 transition-transform"></i>
                             Gestionar Bloques
                         </a>

@@ -58,17 +58,17 @@
                         <h5 class="card-title fw-bold">Redes Sociales</h5>
                         <div class="d-flex justify-content-center gap-3 mt-3">
                             @if(isset($block->data->facebook))
-                            <a href="{{ $block->data->facebook }}" class="btn btn-outline-primary btn-lg" target="_blank">
+                            <a href="{{ $block->data->facebook }}" class="btn btn-outline-primary" target="_blank">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
                             @endif
                             @if(isset($block->data->instagram))
-                            <a href="{{ $block->data->instagram }}" class="btn btn-outline-danger btn-lg" target="_blank">
+                            <a href="{{ $block->data->instagram }}" class="btn btn-outline-danger" target="_blank">
                                 <i class="fab fa-instagram"></i>
                             </a>
                             @endif
                             @if(isset($block->data->youtube))
-                            <a href="{{ $block->data->youtube }}" class="btn btn-outline-danger btn-lg" target="_blank">
+                            <a href="{{ $block->data->youtube }}" class="btn btn-outline-danger" target="_blank">
                                 <i class="fab fa-youtube"></i>
                             </a>
                             @endif

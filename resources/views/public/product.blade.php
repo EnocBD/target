@@ -19,44 +19,57 @@
     <div class="row">
         <!-- Product Images -->
         <div class="col-lg-6 mb-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-0">
-                    @if($product->mainImage)
-                        <a href="{{ $product->mainImage->file_url }}"
-                           class="product-image-popup"
-                           title="{{ $product->name }}">
-                            <img src="{{ $product->mainImage->file_url }}"
-                                 alt="{{ $product->name }}"
-                                 class="img-fluid w-100"
-                                 style="object-fit: cover; height: 500px; cursor: zoom-in;"
-                                 id="mainProductImage">
-                        </a>
-                    @else
+            @if($product->images && $product->images->count() > 0)
+                <!-- Main Image -->
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body p-0">
+                        <div class="swiper product-main-swiper">
+                            <div class="swiper-wrapper">
+                                @foreach($product->images as $image)
+                                <div class="swiper-slide">
+                                    <a href="{{ asset($image->file) }}"
+                                       class="main-image-popup"
+                                       title="{{ $product->name }}"
+                                       data-index="{{ $loop->index }}">
+                                        <img src="{{ asset($image->file) }}"
+                                             alt="{{ $product->name }}"
+                                             class="img-fluid w-100"
+                                             style="object-fit: cover; height: 500px; cursor: zoom-in;">
+                                    </a>
+                                </div>
+                                @endforeach
+                            </div>
+                            <!-- Navigation buttons -->
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thumbnail Gallery (Grid System) -->
+                @if($product->images->count() > 1)
+                <div class="row g-3">
+                    @foreach($product->images as $image)
+                    <div class="col-3">
+                        <div class="card border-0 thumbnail-card" data-slide-index="{{ $loop->index }}">
+                            <img src="{{ asset($image->thumbnail) }}"
+                                 alt="{{ $image->title ?? $product->name }}"
+                                 class="img-fluid"
+                                 style="height: 100px; object-fit: cover; width: 100%; cursor: pointer; opacity: 0.6; transition: opacity 0.3s;">
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+            @else
+                <!-- No image placeholder -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-0">
                         <div class="bg-light d-flex align-items-center justify-content-center" style="height: 500px;">
                             <i class="fas fa-image display-1 text-muted"></i>
                         </div>
-                    @endif
+                    </div>
                 </div>
-            </div>
-
-            <!-- Thumbnail Gallery -->
-            @if($product->images && $product->images->count() > 1)
-            <div class="row g-2 mt-2">
-                @foreach($product->images->take(4) as $image)
-                <div class="col-3">
-                    <a href="{{ $image->file_url }}"
-                       class="product-image-popup"
-                       title="{{ $product->name }}">
-                        <div class="card border-0 cursor-pointer" onclick="changeMainImage('{{ $image->file_url }}')">
-                            <img src="{{ $image->file_url }}"
-                                 alt="{{ $product->name }}"
-                                 class="img-fluid"
-                                 style="height: 100px; object-fit: cover; width: 100%;">
-                        </div>
-                    </a>
-                </div>
-                @endforeach
-            </div>
             @endif
         </div>
 
@@ -131,7 +144,7 @@
                         </div>
                         <div class="col">
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <button type="submit" class="btn btn-primary w-100">
                                 <i class="fas fa-cart-plus"></i> Agregar al Carrito
                             </button>
                         </div>
@@ -211,47 +224,89 @@
 </div>
 
 @push('styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
-@endpush
-
 <style>
-.cursor-pointer {
-    cursor: pointer;
+/* Thumbnail styles */
+.thumbnail-card img {
+    opacity: 0.6;
+    transition: all 0.3s;
 }
-.cursor-pointer:hover {
+
+.thumbnail-card.active img {
+    opacity: 1;
+    border: 2px solid #0d6efd;
+    border-radius: 4px;
+}
+
+.thumbnail-card:hover img {
     opacity: 0.8;
-    transition: opacity 0.2s ease;
+}
+
+/* Magnific Popup fade animation */
+.mfp-with-fade {
+    position: relative;
+}
+.mfp-with-fade .mfp-content {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.mfp-with-fade.mfp-ready .mfp-content {
+    opacity: 1;
 }
 </style>
+@endpush
 
 @push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Magnific Popup
-    $('.product-image-popup').magnificPopup({
-        type: 'image',
-        gallery: {
-            enabled: true,
-            navigateByImgClick: true,
-            preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+    @if($product->images && $product->images->count() > 0)
+    var mainSwiper = new Swiper('.product-main-swiper', {
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
         },
-        image: {
-            tError: '<a href="%url%">La imagen</a> no pudo cargarse.',
-            titleSrc: function(item) {
-                return item.el.attr('title');
+        on: {
+            slideChange: function() {
+                updateThumbnailActive(this.activeIndex);
             }
-        },
-        zoom: {
-            enabled: true,
-            duration: 300 // don't forget to change the duration in CSS as well
         }
     });
-});
 
-function changeMainImage(imageUrl) {
-    document.getElementById('mainProductImage').src = imageUrl;
-}
+    // Initialize first thumbnail as active
+    var firstThumbnail = document.querySelector('.thumbnail-card[data-slide-index="0"]');
+    if (firstThumbnail) {
+        firstThumbnail.classList.add('active');
+    }
+
+    // Thumbnail click handlers
+    document.querySelectorAll('.thumbnail-card').forEach(function(thumbnail) {
+        thumbnail.addEventListener('click', function() {
+            var slideIndex = parseInt(this.getAttribute('data-slide-index'));
+            mainSwiper.slideTo(slideIndex);
+            updateThumbnailActive(slideIndex);
+        });
+    });
+
+    function updateThumbnailActive(index) {
+        // Remove active class from all thumbnails
+        document.querySelectorAll('.thumbnail-card').forEach(function(thumb) {
+            thumb.classList.remove('active');
+            thumb.querySelector('img').style.opacity = '0.6';
+        });
+
+        // Add active class to current thumbnail
+        var activeThumb = document.querySelector('.thumbnail-card[data-slide-index="' + index + '"]');
+        if (activeThumb) {
+            activeThumb.classList.add('active');
+            activeThumb.querySelector('img').style.opacity = '1';
+        }
+    }
+
+    // Initialize Magnific Popup on all main images
+    if (typeof initMagnificPopup === 'function') {
+        initMagnificPopup('.main-image-popup');
+    }
+    @endif
+});
 </script>
 @endpush
 @endsection

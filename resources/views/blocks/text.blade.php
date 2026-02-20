@@ -18,7 +18,7 @@
 
                 @if(isset($block->data->button_text) && isset($block->data->button_url))
                 <div class="mt-4">
-                    <a href="{{ $block->data->button_url }}" class="btn btn-{{ $block->data->button_color ?? 'primary' }} btn-lg">
+                    <a href="{{ $block->data->button_url }}" class="btn btn-{{ $block->data->button_color ?? 'primary' }}">
                         {{ $block->data->button_text }}
                     </a>
                 </div>

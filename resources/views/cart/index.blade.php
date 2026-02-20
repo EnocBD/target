@@ -142,7 +142,7 @@
                         <span class="fs-5">Total:</span>
                         <strong class="fs-4 text-primary">Gs. {{ number_format($total, 0, ',', '.') }}</strong>
                     </div>
-                    <a href="{{ route('cart.checkout') }}" class="btn btn-success btn-lg w-100">
+                    <a href="{{ route('cart.checkout') }}" class="btn btn-success w-100">
                         <i class="fab fa-whatsapp"></i> Proceder al Checkout
                     </a>
                     <p class="text-center text-muted small mt-3 mb-0">
@@ -171,7 +171,7 @@
         <i class="fas fa-cart-shopping display-1 text-muted mb-3"></i>
         <h4>Tu carrito está vacío</h4>
         <p class="mb-4">Agrega productos para comenzar tu compra.</p>
-        <a href="{{ url('/productos') }}" class="btn btn-primary btn-lg">
+        <a href="{{ url('/productos') }}" class="btn btn-primary">
             <i class="fas fa-store"></i> Ver Productos
         </a>
     </div>

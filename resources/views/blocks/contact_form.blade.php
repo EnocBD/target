@@ -76,7 +76,7 @@
                                         </div>
 
                                         <div class="col-12">
-                                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                            <button type="submit" class="btn btn-primary w-100">
                                                 <i class="fas fa-paper-plane me-2"></i>
                                                 {{ $block->data->button_text ?? 'Enviar Mensaje' }}
                                             </button>

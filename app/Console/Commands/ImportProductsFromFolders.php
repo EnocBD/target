@@ -47,14 +47,8 @@ class ImportProductsFromFolders extends Command
         $path = $this->option('path');
         $cleanupFirst = $this->option('cleanup-first');
 
-        if ($cleanupFirst) {
-            if (!$this->confirm('¿Estás seguro de que quieres eliminar TODOS los productos, categorías y marcas existentes?')) {
-                $this->info('Operación cancelada.');
-                return self::SUCCESS;
-            }
-
-            $this->cleanup();
-        }
+        // Siempre hacer cleanup al inicio
+        $this->cleanup();
 
         $this->info('Iniciando importación de productos...');
         $this->info("Ruta: {$path}");
@@ -127,7 +121,7 @@ class ImportProductsFromFolders extends Command
     }
 
     /**
-     * Obtener lista de carpetas de productos con estructura: Categoría > Marca > Producto
+     * Obtener lista de carpetas de productos con estructura: Categoría > Producto (con imágenes)
      * Retorna un array con información de la estructura
      */
     protected function getProductFolders(string $path): array
@@ -155,38 +149,22 @@ class ImportProductsFromFolders extends Command
                 continue;
             }
 
-            // Leer marcas (segundo nivel)
-            $brands = scandir($categoryPath);
+            // Leer carpetas de productos (segundo nivel)
+            $productFolders = scandir($categoryPath);
 
-            foreach ($brands as $brand) {
-                if ($brand === '.' || $brand === '..') {
+            foreach ($productFolders as $productFolder) {
+                if ($productFolder === '.' || $productFolder === '..') {
                     continue;
                 }
 
-                $brandPath = $categoryPath . '/' . $brand;
+                $productPath = $categoryPath . '/' . $productFolder;
 
-                if (!is_dir($brandPath)) {
-                    continue;
-                }
-
-                // Leer productos (tercer nivel)
-                $productFolders = scandir($brandPath);
-
-                foreach ($productFolders as $product) {
-                    if ($product === '.' || $product === '..') {
-                        continue;
-                    }
-
-                    $productPath = $brandPath . '/' . $product;
-
-                    if (is_dir($productPath)) {
-                        $products[] = [
-                            'category' => $category,
-                            'brand' => $brand,
-                            'product' => $product,
-                            'full_path' => $productPath,
-                        ];
-                    }
+                if (is_dir($productPath)) {
+                    $products[] = [
+                        'category' => $category,
+                        'product_folder' => $productFolder,
+                        'full_path' => $productPath,
+                    ];
                 }
             }
         }
@@ -195,51 +173,41 @@ class ImportProductsFromFolders extends Command
     }
 
     /**
-     * Importar un producto desde una carpeta con estructura: categoría > marca > producto
+     * Importar productos desde una carpeta con imágenes
+     * Agrupa imágenes por código de producto (patrón: [1-2]-[CODIGO]-C[COLOR].jpg)
      */
     protected function importProductFromFolder(array $folderData): void
     {
         $categoryName = $folderData['category'];
-        $brandName = $folderData['brand'];
-        $productName = $folderData['product'];
+        $productFolder = $folderData['product_folder'];
         $folderPath = $folderData['full_path'];
 
-        // Obtener imágenes de la carpeta
+        // Obtener todas las imágenes de la carpeta
         $images = $this->getImagesFromFolder($folderPath);
 
         if (empty($images)) {
-            $this->warn("No se encontraron imágenes en {$productName}");
+            $this->warn("No se encontraron imágenes en {$productFolder}");
             return;
         }
 
-        // Obtener o crear categoría
-        $category = $this->getOrCreateCategory($categoryName);
+        // Agrupar imágenes por código de producto
+        $groupedImages = $this->groupImagesByProductCode($images);
 
-        // Obtener o crear marca
+        if (empty($groupedImages)) {
+            $this->warn("No se pudo extraer códigos de producto de {$productFolder}");
+            return;
+        }
+
+        // Extraer marca del nombre de la carpeta
+        $brandName = $this->extractBrandFromFolderName($productFolder);
+
+        // Obtener o crear categoría y marca
+        $category = $this->getOrCreateCategory($categoryName);
         $brand = $this->getOrCreateBrand($brandName);
 
-        // Extraer código del producto del nombre de la carpeta
-        $productCode = $this->extractProductCode($productName);
-
-        // Crear el producto con la información de la estructura de carpetas
-        $product = Product::create([
-            'sku' => strtoupper($productCode),
-            'name' => $productName,
-            'slug' => $this->generateUniqueSlug($brandName, $productCode, $productName),
-            'description' => "{$productName} - Modelo exclusivo de {$brandName}",
-            'text' => "Descubre {$productName}, parte de la colección de {$categoryName} de {$brandName}. Diseño elegante y materiales de alta calidad.",
-            'price' => $this->generatePriceForBrand($brandName),
-            'list_price' => $this->generatePriceForBrand($brandName) * 1.25,
-            'category_id' => $category->id,
-            'brand_id' => $brand->id,
-            'is_active' => true,
-            'is_featured' => rand(0, 10) === 0, // 10% de chance de ser destacado
-            'sort_order' => rand(0, 100),
-        ]);
-
-        // Procesar imágenes con MediaService
-        foreach ($images as $index => $imagePath) {
-            $this->processImageForProduct($imagePath, $product, $index);
+        // Crear un producto por cada código encontrado
+        foreach ($groupedImages as $productCode => $imagesData) {
+            $this->createProductFromImages($productCode, $imagesData, $brand, $category, $productFolder);
         }
     }
 
@@ -414,7 +382,7 @@ class ImportProductsFromFolders extends Command
     /**
      * Procesar imagen para producto usando MediaService
      */
-    protected function processImageForProduct(string $imagePath, Product $product, int $sortOrder): void
+    protected function processImageForProduct(string $imagePath, Product $product, int $sortOrder, ?string $colorCode = null): void
     {
         try {
             // Crear UploadedFile desde la imagen existente
@@ -429,10 +397,121 @@ class ImportProductsFromFolders extends Command
             );
 
             // Usar MediaService para procesar la imagen
-            $this->mediaService->storeMedia($uploadedFile, $product, 'image', $sortOrder);
+            $media = $this->mediaService->storeMedia($uploadedFile, $product, 'image', $sortOrder);
+
+            // Actualizar el title con el código de color si existe
+            if ($media && $colorCode) {
+                $media->update(['title' => $colorCode]);
+            }
 
         } catch (\Exception $e) {
             $this->warn("Error procesando imagen {$imagePath}: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Agrupar imágenes por código de producto
+     * Soporta dos patrones:
+     * 1. [1-2]-[CODIGO]-C[COLOR].jpg (ej: 1-8875-54-15-C1.jpg)
+     * 2. [CODIGO]-[NUMERO]-C[COLOR].jpg (ej: 004 5 5 16 145-1-C1.jpg)
+     */
+    protected function groupImagesByProductCode(array $images): array
+    {
+        $grouped = [];
+
+        foreach ($images as $imagePath) {
+            $filename = basename($imagePath);
+
+            // Intentar patrón 1: [1-2]-[CODIGO][-C[COLOR]]?.jpg
+            if (preg_match('/^[12]-(.+?)(-C\d+)?\.jpg$/', $filename, $matches)) {
+                $productCode = $matches[1];
+                $colorCode = isset($matches[2]) ? ltrim($matches[2], '-') : null;
+
+                if (!isset($grouped[$productCode])) {
+                    $grouped[$productCode] = [];
+                }
+
+                $grouped[$productCode][] = [
+                    'path' => $imagePath,
+                    'color' => $colorCode,
+                    'filename' => $filename,
+                ];
+            }
+            // Intentar patrón 2: [CODIGO]-[NUMERO][-C[COLOR]]?.jpg
+            elseif (preg_match('/^(.+?)-(\d+)(-C\d+)?\.jpg$/', $filename, $matches)) {
+                $productCode = $matches[1];
+                $colorCode = isset($matches[3]) ? ltrim($matches[3], '-') : null;
+
+                if (!isset($grouped[$productCode])) {
+                    $grouped[$productCode] = [];
+                }
+
+                $grouped[$productCode][] = [
+                    'path' => $imagePath,
+                    'color' => $colorCode,
+                    'filename' => $filename,
+                ];
+            }
+        }
+
+        return $grouped;
+    }
+
+    /**
+     * Extraer nombre de marca del nombre de la carpeta
+     * Ej: "Cambidge (YG11045 8875)" -> "Cambidge"
+     */
+    protected function extractBrandFromFolderName(string $folderName): string
+    {
+        // Extraer el nombre antes del primer paréntesis o espacio
+        if (preg_match('/^([^\(]+?)(?:\s*\(|$)/', $folderName, $matches)) {
+            return trim($matches[1]);
+        }
+
+        // Si no hay paréntesis, usar la primera palabra
+        $words = explode(' ', $folderName);
+        return $words[0] ?? $folderName;
+    }
+
+    /**
+     * Crear producto desde un grupo de imágenes
+     */
+    protected function createProductFromImages(string $productCode, array $imagesData, Brand $brand, Category $category, string $folderName): void
+    {
+        // Generar SKU único
+        $sku = strtoupper(str_replace([' ', '-'], '', $productCode));
+
+        // Generar slug único
+        $slug = $this->generateUniqueSlug($brand->name, $sku, $productCode);
+
+        // Obtener colores únicos para el nombre
+        $colors = array_unique(array_filter(array_column($imagesData, 'color')));
+        $colorSuffix = !empty($colors) ? ' (' . implode(', ', $colors) . ')' : '';
+
+        // Crear el producto
+        $product = Product::create([
+            'sku' => $sku,
+            'name' => "{$productCode}{$colorSuffix}",
+            'slug' => $slug,
+            'description' => "{$productCode} - Modelo exclusivo de {$brand->name}",
+            'text' => "Descubre {$productCode}, parte de la colección de {$category->name} de {$brand->name}. Diseño elegante y materiales de alta calidad.",
+            'price' => $this->generatePriceForBrand($brand->name),
+            'list_price' => $this->generatePriceForBrand($brand->name) * 1.25,
+            'category_id' => $category->id,
+            'brand_id' => $brand->id,
+            'is_active' => true,
+            'is_featured' => rand(0, 10) === 0, // 10% de chance de ser destacado
+            'sort_order' => rand(0, 100),
+        ]);
+
+        // Procesar imágenes con orden
+        foreach ($imagesData as $index => $imageData) {
+            $this->processImageForProduct(
+                $imageData['path'],
+                $product,
+                $index,
+                $imageData['color']
+            );
         }
     }
 }

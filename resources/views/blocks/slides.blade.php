@@ -35,7 +35,7 @@
                         <p class="lead">{{ $slide->description }}</p>
                         @endif
                         @if(isset($slide->button_text) && isset($slide->button_url))
-                        <a href="{{ $slide->button_url }}" class="btn btn-{{ $slide->button_color ?? 'primary' }} btn-lg mt-3">
+                        <a href="{{ $slide->button_url }}" class="btn btn-{{ $slide->button_color ?? 'primary' }} mt-3">
                             {{ $slide->button_text }}
                         </a>
                         @endif

@@ -14,6 +14,7 @@ class Media extends Model
         'file',
         'thumbnail',
         'original_name',
+        'title',
         'mime_type',
         'size',
         'width',

@@ -83,7 +83,7 @@
                 </div>
 
                 <!-- Botón de Confirmar -->
-                <button type="submit" class="btn btn-success btn-lg w-100">
+                <button type="submit" class="btn btn-success w-100">
                     <i class="fab fa-whatsapp"></i> Confirmar Pedido por WhatsApp
                 </button>
                 <p class="text-center text-muted small mt-3 mb-0">

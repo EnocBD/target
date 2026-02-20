@@ -43,7 +43,7 @@
 
                             <!-- Brands -->
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Marcas</label>
+                                <label class="form-label fw-bold">Colecciones</label>
                                 <div style="max-height: 200px; overflow-y: auto;">
                                     @foreach($brands as $br)
                                     <div class="form-check">

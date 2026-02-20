@@ -1,7 +1,3 @@
-@php
-    $featuredProducts = \App\Models\Product::active()->featured()->with(['category', 'brand', 'media'])->ordered()->get();
-@endphp
-
 @if($featuredProducts->count() > 0)
 <section class="py-5 bg-light">
     <div class="container">
@@ -19,7 +15,7 @@
         @endif
 
         <div class="row g-4">
-            @foreach($featuredProducts->take(4) as $product)
+            @foreach($featuredProducts as $product)
             <div class="col-lg-3 col-md-6">
                 <x-product-card :product="$product" />
             </div>
@@ -28,21 +24,11 @@
 
         @if(isset($block->data->show_all_button) && $block->data->show_all_button)
         <div class="text-center mt-5">
-            <a href="{{ url('/productos') }}" class="btn btn-primary btn-lg">
+            <a href="{{ url('/productos') }}" class="btn btn-primary">
                 Ver Todos los Productos <i class="fas fa-arrow-right"></i>
             </a>
         </div>
         @endif
     </div>
 </section>
-
-<style>
-.hover-lift {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.hover-lift:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
-}
-</style>
 @endif

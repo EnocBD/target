@@ -148,5 +148,19 @@ class BlockServiceProvider extends ServiceProvider
                 'title' => $title,
             ]);
         });
+
+        // View composer para el bloque featured_products
+        View::composer('blocks.featured_products', function ($view) {
+            $featuredProducts = Product::active()
+                ->featured()
+                ->with(['category', 'brand', 'media'])
+                ->ordered()
+                ->take(4)
+                ->get();
+
+            $view->with([
+                'featuredProducts' => $featuredProducts,
+            ]);
+        });
     }
 }

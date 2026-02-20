@@ -21,7 +21,7 @@ class ContactFormMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct($formData, $attachments, $subjectPrefix = '[Club Centenario - Contacto]')
+    public function __construct($formData, $attachments, $subjectPrefix = '')
     {
         $this->formData = $formData;
         $this->attachments = $attachments;

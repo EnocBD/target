@@ -286,8 +286,8 @@ class FormController extends Controller
     private function sendEmails($formType, $formData, $uploadedFiles, $formSettings, Request $request)
     {
         try {
-            $recipientEmail = $formSettings->recipient_email ?? 'info@clubcentenario.org.py';
-            $subjectPrefix = $formSettings->subject_prefix ?? '[Club Centenario]';
+            $recipientEmail = $formSettings->recipient_email ?? 'no-reply@example.com';
+            $subjectPrefix = $formSettings->subject_prefix ?? '';
             
             // Send main form email
             if ($formType === 'trabaja-con-nosotros') {

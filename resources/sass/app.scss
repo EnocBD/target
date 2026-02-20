@@ -37,11 +37,60 @@ $font-weight-bold: 700 !default;
 // ============================================================
 // CUSTOM STYLES
 // ============================================================
+$unit: 15px;
 body {
   font-size: 15px;
+  color: #181818;
+  line-height: 1.25em;
+}
+.btn {
+  font: inherit;
 }
 img {
   display: block;
+}
+.target-card {
+  color: #fff;
+  background: $primary;
+  padding: $unit*1.5;
+  border-radius: $unit;
+  height: 100%;
+  overflow: hidden;
+
+  span {
+    font-family: 'Monument Extended', sans-serif;
+    font-size: 9em;
+    display: block;
+    line-height: 1;
+    margin-right: -.5em;
+    opacity: .33333333;
+    transform: translateX(-.125em);
+  }
+}
+#target-card-2 {
+  background: $secondary;
+}
+#target-card-3 {
+  background: #808080;
+}
+.swiper-pagination {
+  display: flex;
+  justify-content: center;
+  bottom: $unit !important;
+
+  .swiper-pagination-bullet {
+    background: none !important;
+    width: $unit;
+    height: $unit;
+    border: 2px solid #fff;
+    transition: .3s;
+    margin: 0 $unit/2;
+    opacity: 1 !important;
+
+    &.swiper-pagination-bullet-active {
+      background: #fff !important;
+    }
+  }
 }
 // ============================================================
 // NAVIGATION

@@ -333,5 +333,42 @@ return [
                 ],
             ],
         ],
+
+        'steps' => [
+            'name' => 'Pasos de Compra - Target Eyewear',
+            'description' => 'Sección de pasos con título, descripción y repeater de pasos',
+            'fields' => [
+                'title' => [
+                    'type' => 'text',
+                    'label' => 'Título',
+                    'required' => false,
+                    'default' => 'Cómo comprar',
+                ],
+                'description' => [
+                    'type' => 'text',
+                    'label' => 'Descripción (small)',
+                    'required' => false,
+                    'default' => 'Fácil y seguro',
+                ],
+                'steps' => [
+                    'type' => 'repeater',
+                    'label' => 'Pasos',
+                    'min_items' => 1,
+                    'max_items' => 4,
+                    'fields' => [
+                        'title' => [
+                            'type' => 'text',
+                            'label' => 'Título del Paso',
+                            'required' => true,
+                        ],
+                        'text' => [
+                            'type' => 'textarea',
+                            'label' => 'Descripción del Paso',
+                            'required' => true,
+                        ],
+                    ],
+                ],
+            ],
+        ],
     ],
 ];

@@ -21,7 +21,7 @@ class CareersFormMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct($formData, $attachments, $subjectPrefix = '[Club Centenario - Postulación Laboral]')
+    public function __construct($formData, $attachments, $subjectPrefix = '')
     {
         $this->formData = $formData;
         $this->attachments = $attachments;

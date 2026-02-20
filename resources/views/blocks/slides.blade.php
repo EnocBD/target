@@ -7,22 +7,14 @@
                 @if(isset($slide->image))
                 <!-- Desktop Image -->
                 <img src="{{ asset($slide->image) }}"
-                     class="d-block d-lg-none w-100"
-                     alt="{{ $slide->title ?? 'Slide' }}"
-                     style="max-height: 500px; object-fit: cover;">
+                     class="d-none d-lg-block w-100"
+                     alt="{{ $slide->title ?? 'Slide' }}">
 
                 @if(isset($slide->image_mobile))
                 <!-- Mobile Image -->
                 <img src="{{ asset($slide->image_mobile) }}"
-                     class="d-none d-lg-block w-100"
-                     alt="{{ $slide->title ?? 'Slide' }}"
-                     style="max-height: 500px; object-fit: cover;">
-                @else
-                <!-- Fallback: Use desktop image for both -->
-                <img src="{{ asset($slide->image) }}"
-                     class="d-none d-lg-block w-100"
-                     alt="{{ $slide->title ?? 'Slide' }}"
-                     style="max-height: 500px; object-fit: cover;">
+                     class="d-lg-none w-100"
+                     alt="{{ $slide->title ?? 'Slide' }}">
                 @endif
                 @endif
                 @if(isset($slide->title) || isset($slide->description))

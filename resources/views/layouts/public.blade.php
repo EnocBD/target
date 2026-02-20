@@ -18,9 +18,6 @@
         };
     </script>
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Raleway:wght@600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="{{ asset('images/icon.png') }}">
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @stack('styles')
@@ -116,42 +113,6 @@
     <!-- Content -->
     @yield('content')
 
-<section class="py-5 bg-light">
-    <div class="container">
-
-        <div class="mb-4">
-            <small class="fw-semibold" style="color:#098CC0;">
-                Fácil y seguro
-            </small>
-            <h2 class="fw-bold" style="color:#0D3A63;">
-                Cómo comprar
-            </h2>
-        </div>
-
-        <div class="row g-4">
-
-            <div class="col-lg-4">
-                <img src="{{ asset('images/Tips-Compras-Ecommerce-1.png') }}"
-                     class="img-fluid rounded-4 shadow-sm w-100 how-buy-img"
-                     alt="Elegí tus productos">
-            </div>
-
-            <div class="col-lg-4">
-                <img src="{{ asset('images/Tips-Compras-Ecommerce-2.png') }}"
-                     class="img-fluid rounded-4 shadow-sm w-100 how-buy-img"
-                     alt="Hacé tu pedido">
-            </div>
-
-            <div class="col-lg-4">
-                <img src="{{ asset('images/Tips-Compras-Ecommerce-3.png') }}"
-                     class="img-fluid rounded-4 shadow-sm w-100 how-buy-img"
-                     alt="Envíos a todo el país">
-            </div>
-
-        </div>
-
-    </div>
-</section>
     <!-- Footer -->
     <footer class="bg-primary text-white py-5">
         <div class="container">

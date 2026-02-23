@@ -223,38 +223,6 @@
     @endif
 </div>
 
-@push('styles')
-<style>
-/* Thumbnail styles */
-.thumbnail-card img {
-    opacity: 0.6;
-    transition: all 0.3s;
-}
-
-.thumbnail-card.active img {
-    opacity: 1;
-    border: 2px solid #0d6efd;
-    border-radius: 4px;
-}
-
-.thumbnail-card:hover img {
-    opacity: 0.8;
-}
-
-/* Magnific Popup fade animation */
-.mfp-with-fade {
-    position: relative;
-}
-.mfp-with-fade .mfp-content {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-.mfp-with-fade.mfp-ready .mfp-content {
-    opacity: 1;
-}
-</style>
-@endpush
-
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {

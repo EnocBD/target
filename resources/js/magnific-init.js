@@ -10,9 +10,12 @@ window.initMagnificPopup = function(selector) {
     $(selector).magnificPopup({
         type: 'image',
         gallery: {
-            enabled: false, // Disabled for single image popup
+            enabled: true,
             navigateByImgClick: true,
-            preload: [0, 1]
+            preload: [0, 1],
+            tPrev: 'Anterior (Tecla flecha izquierda)',
+            tNext: 'Siguiente (Tecla flecha derecha)',
+            tCounter: '%curr% de %total%'
         },
         image: {
             tError: '<a href="%url%">La imagen</a> no pudo cargarse.',
@@ -21,14 +24,17 @@ window.initMagnificPopup = function(selector) {
             }
         },
         zoom: {
-            enabled: true,
-            duration: 300
+            enabled: false
         },
-        callbacks: {
-            beforeOpen: function() {
-                // Add zoom animation
-                this.st.mainClass = 'mfp-with-fade';
-            }
-        }
+        removalDelay: 0,
+        mainClass: '',
+        closeBtnInside: true,
+        closeOnContentClick: true,
+        closeOnBgClick: true,
+        showCloseBtn: true,
+        enableEscapeKey: true,
+        modal: false,
+        tClose: 'Cerrar (Esc)',
+        tLoading: 'Cargando...'
     });
 };
